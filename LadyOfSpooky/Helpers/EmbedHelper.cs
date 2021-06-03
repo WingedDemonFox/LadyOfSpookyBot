@@ -22,7 +22,7 @@ namespace LadyOfSpooky.Helpers
         {
             EmbedBuilder builder = new();
 
-            builder.WithTitle($"{monster.MonsterName}");
+            builder.WithTitle($"{monster.Name}");
             if (description != null)
             {
                 builder.WithDescription(description);
@@ -34,9 +34,14 @@ namespace LadyOfSpooky.Helpers
             builder.AddField('\u200B'.ToString(), '\u200B', true);
 
             builder.AddField("Nr Attacks", $"{monster.NumberOfAttacks}", true);
-            builder.AddField("HitProb", $"{monster.HitProb}", true);
+            builder.AddField("HitProb", $"{monster.HitProbability}", true);
 
             builder.WithFooter(new EmbedFooterBuilder().WithText($"Level: {monster.Level}"));
+
+            if (!string.IsNullOrEmpty(monster.PicUrl))
+            {
+                builder.WithThumbnailUrl(monster.PicUrl);
+            }
 
             builder.WithColor(LevelHelper.GetColorByLevel(monster.Level));
 
@@ -47,20 +52,87 @@ namespace LadyOfSpooky.Helpers
         {
             EmbedBuilder builder = new();
 
-            builder.WithTitle($"{player.DiscordUserName}");
-            builder.WithDescription($"Level {player.Level} {player.ChosenClass}");
+            builder.WithTitle($"{player.Name}");
+            builder.WithDescription($"Level {player.Level} {player.ChosenClass} {player.Exp}");
 
-            builder.AddField("Defense", "soon", true);
-            builder.AddField("Attack", "soon", true);
+            builder.AddField("Defense", $"{player.Defense}", true);
+            builder.AddField("Attack", $"{player.Attack}", true);
 
             builder.AddField('\u200B'.ToString(), '\u200B', true);
 
-            builder.AddField("Nr Attacks", "soon", true);
-            builder.AddField("HitProb", "soon", true);
+            builder.AddField("Health", $"{player.Health}", true);
+            builder.AddField("HitProb", $"{player.HitProbability}", true);
 
             builder.WithColor(LevelHelper.GetColorByLevel(player.Level));
 
             return builder;
         }
+
+        public static EmbedBuilder GetFightEmbed(Fight fight)
+        {
+            EmbedBuilder builder = new();
+
+            builder.WithTitle($"Fight against {fight.Monster.Name}");
+            builder.WithDescription($"Group of {fight.Players.Count}");
+
+            builder.AddField($"Health of {fight.Monster.Name}", $"{fight.Monster.Health}", false);
+
+            var fighterName = string.Empty;
+            var fighterClass = string.Empty;
+            var fighterHealth = string.Empty;
+
+            foreach (var fighter in fight.Players)
+            {
+                fighterName += $"{fighter.Name}\n";
+                fighterClass += $"{fighter.ChosenClass}\n";
+                fighterHealth += $"{fighter.Health}\n";
+            }
+
+            builder.AddField("Fighter", fighterName, true);
+            builder.AddField("Class", fighterClass, true);
+            builder.AddField("Health", fighterHealth, true);
+
+            builder.AddField("Active Player", $"{fight.ActivePlayer.Name}", false);
+
+            builder.WithColor(LevelHelper.GetColorByLevel(fight.Monster.Level));
+
+            return builder;
+        }
+
+        public static EmbedBuilder GetFightWonEmbed(Fight fight)
+        {
+            EmbedBuilder builder = new();
+
+            builder.WithTitle($"Won fight against {fight.Monster.Name}");
+            builder.WithDescription($"{fight.ActivePlayer.Name} slayed {fight.Monster.Name}");
+
+            builder.AddField("Loot", $"{fight.ActivePlayer.Name} gained {fight.Monster.Exp} exp", false);
+
+            builder.WithColor(LevelHelper.GetColorByLevel(fight.Monster.Level));
+            if (!string.IsNullOrEmpty(fight.Monster.PicUrl))
+            {
+                builder.WithThumbnailUrl(fight.Monster.PicUrl);
+            }
+            return builder;
+        }
+
+        public static EmbedBuilder GetFightGameOverEmbed(Fight fight)
+        {
+            EmbedBuilder builder = new();
+
+            builder.WithTitle($"Lost fight against {fight.Monster.Name}");
+            builder.WithDescription($"{fight.ActivePlayer.Name} was killed by {fight.Monster.Name}");
+
+            builder.AddField("Lost", $"{fight.ActivePlayer.Name} lost {fight.Monster.Exp} exp", false);
+
+            builder.WithColor(LevelHelper.GetColorByLevel(fight.Monster.Level));
+            if (!string.IsNullOrEmpty(fight.Monster.PicUrl))
+            {
+                builder.WithThumbnailUrl(fight.Monster.PicUrl);
+            }
+
+            return builder;
+        }
+
     }
 }

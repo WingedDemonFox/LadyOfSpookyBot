@@ -49,9 +49,7 @@ namespace LadyOfSpooky.Services
 
             var argPos = 0;
 
-            var prefix = "boo ";
-
-            if (!(message.HasMentionPrefix(_client.CurrentUser, ref argPos) || message.HasStringPrefix(prefix, ref argPos)) || message.Author.IsBot)
+            if (!(message.HasMentionPrefix(_client.CurrentUser, ref argPos) || message.HasStringPrefix(Global.Prefix, ref argPos)) || message.Author.IsBot)
             {
                 return;
             }

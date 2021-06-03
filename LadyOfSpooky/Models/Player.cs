@@ -6,28 +6,65 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using LadyOfSpooky.Helpers;
 using static LadyOfSpooky.Models.Enums;
 
 namespace LadyOfSpooky.Models
 {
-    public class Player
+    public class Player : BaseFighter
     {
         public decimal DiscordUserId { get; set; }
-        public string DiscordUserName { get; set; }
+        public Classes ChosenClass { get; set; } = Classes.Civil;
 
-        public Classes ChosenClass { get; set; }
-
-        public int Level { get; set; } = 1;
-
-        public int AttackMonster()
+        public Player()
         {
-            return ChosenClass switch
+            UpdateClassValues();
+        }
+
+        public void UpdateClassValues()
+        {
+            if (ChosenClass == Classes.Wizard)
             {
-                Classes.Fighter => 3,
-                Classes.Tank => 2,
-                Classes.Wizard => 5,
-                _ => 1,
-            };
+                Attack = 12 + Level;
+                Defense = 5 + Level;
+                Health = 8 + (2 * Level);
+                HitProbability = 60;
+            }
+            else if (ChosenClass == Classes.Tank)
+            {
+                Attack = 5 + Level;
+                Defense = 12 + Level;
+                Health = 12 + (2 * Level);
+                HitProbability = 90;
+            }
+            else if (ChosenClass == Classes.Fighter)
+            {
+                Attack = 8 + Level;
+                Defense = 8 + Level;
+                Health = 10 + (2 * Level);
+                HitProbability = 85;
+            }
+        }
+
+        public void UpdateExpAndLevel(int expChange)
+        {
+            var lvl = Level;
+            int newExp = Exp + expChange;
+            if (newExp < 0)
+            {
+                Exp = 0;
+            }
+            else
+            {
+                Exp = newExp;
+            }
+
+            var newLvl = LevelHelper.CalcLevelByExp(Exp);
+            if (lvl != newLvl)
+            {
+                Level = newLvl;
+            }
+            UpdateClassValues();
         }
     }
 }

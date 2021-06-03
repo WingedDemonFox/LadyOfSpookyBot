@@ -18,7 +18,7 @@ namespace LadyOfSpooky.Reactions
             var player = players.Where(p => p.DiscordUserId == userId).SingleOrDefault();
 
             player.ChosenClass = GetClassByEmoji(emoji);
-
+            player.UpdateClassValues();
             DataHelper.WritePlayersToFile(players);
         }
 

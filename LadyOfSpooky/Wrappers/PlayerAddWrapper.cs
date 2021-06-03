@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LadyOfSpooky.Helpers
+namespace LadyOfSpooky.Wrappers
 {
     public class PlayerAddWrapper
     {

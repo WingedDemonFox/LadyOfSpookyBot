@@ -41,6 +41,13 @@ namespace LadyOfSpooky
             Global.MonstersFile = _config["MonstersFile"];
             Global.Version = _config["Version"];
 
+#if DEBUG
+            Global.Prefix = _config["PrefixDebug"];
+#else
+            Global.Prefix = _config["Prefix"];
+#endif
+
+
             using var services = ConfigureServices();
             var client = services.GetRequiredService<DiscordSocketClient>();
             _client = client;
@@ -52,6 +59,12 @@ namespace LadyOfSpooky
             var token = _config["DiscordToken"];
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
+#if DEBUG
+            await _client.SetGameAsync("dev mode", null, ActivityType.Listening);
+#else
+            await _client.SetGameAsync("the monsters", null, ActivityType.Watching);
+#endif
+
 
             await services.GetRequiredService<CommandHandler>().InitializeAsync();
             services.GetRequiredService<ReactionHandler>().Initialize();

@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using LadyOfSpooky.Helpers;
 using LadyOfSpooky.Models;
+using LadyOfSpooky.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +35,7 @@ namespace LadyOfSpooky.Modules
             {
                 playerLvls += $"{player.Level}\n";
                 playerClass += $"{player.ChosenClass}\n";
-                playerName += $"{player.DiscordUserName}\n";
+                playerName += $"{player.Name}\n";
             }
 
             builder.AddField("Level", playerLvls, true);
@@ -43,7 +44,8 @@ namespace LadyOfSpooky.Modules
             builder.WithCurrentTimestamp();
             builder.WithColor(Color.LighterGrey);
 
-            await Context.Channel.SendMessageAsync("", false, builder.Build());
+            var msg = await Context.Channel.SendMessageAsync("", false, builder.Build());
+            EmbedHelper.DeleteMessage(msg, TimeSpan.FromSeconds(20));
         }
 
         [Command("add", RunMode = RunMode.Async)]
@@ -52,7 +54,7 @@ namespace LadyOfSpooky.Modules
         {
             var user = Context.Message.Author as SocketGuildUser;
 
-            var player = new Player() { DiscordUserId = user.Id, DiscordUserName = user.Nickname ?? user.Username };
+            var player = new Player() { DiscordUserId = user.Id, Name = user.Nickname ?? user.Username };
 
             var players = DataHelper.GetPlayersFromFile();
             if (!players.Where(p => p.DiscordUserId == user.Id).Any())
@@ -63,7 +65,7 @@ namespace LadyOfSpooky.Modules
 
             EmbedBuilder builder = new();
 
-            builder.WithTitle($"Choose your class {player.DiscordUserName}");
+            builder.WithTitle($"Choose your class {player.Name}");
 
             builder.AddField("Wizard", $"{EmojiHelper.Emojis["Wizard"]}", true);
             builder.AddField("Fighter", $"{EmojiHelper.Emojis["Fighter"]}", true);
@@ -91,7 +93,8 @@ namespace LadyOfSpooky.Modules
             }
 
             var embedBuilder = EmbedHelper.GetPlayerEmbed(player);
-            await Context.Channel.SendMessageAsync("", false, embedBuilder.Build());
+            var msg = await Context.Channel.SendMessageAsync("", false, embedBuilder.Build());
+            EmbedHelper.DeleteMessage(msg, TimeSpan.FromSeconds(20));
         }
     }
 }

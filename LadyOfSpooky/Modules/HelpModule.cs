@@ -26,7 +26,7 @@ namespace LadyOfSpooky.Modules
             builder.WithDescription($"Here to help my minions {some}");
             builder.WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl());
 
-            builder.AddField("Prefix", "`boo `", false);
+            builder.AddField("Prefix", $"`{Global.Prefix}`", false);
 
             foreach (var module in availableModules)
             {
@@ -38,8 +38,7 @@ namespace LadyOfSpooky.Modules
             builder.WithCurrentTimestamp();
             builder.WithColor(Color.Red);
 
-            var msg = await Context.Channel.SendMessageAsync("", false, builder.Build());
-            EmbedHelper.DeleteMessage(msg, TimeSpan.FromSeconds(20));
+            await Context.Channel.SendMessageAsync("", false, builder.Build());
         }
 
         [RequireOwner]
@@ -55,7 +54,7 @@ namespace LadyOfSpooky.Modules
             builder.WithDescription($"Here to help my minions {some}");
             builder.WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl());
 
-            builder.AddField("Prefix", "`boo `", false);
+            builder.AddField("Prefix", $"`{Global.Prefix}`", false);
 
             foreach (var module in availableModules)
             {
@@ -64,13 +63,10 @@ namespace LadyOfSpooky.Modules
                 builder.AddField(module, mod, false);
             }
 
-            builder.WithCurrentTimestamp();
-
             builder.WithColor(Color.Red);
+
             var msg = await Context.Channel.SendMessageAsync("", false, builder.Build());
-
             EmbedHelper.DeleteMessage(msg, TimeSpan.FromSeconds(20));
-
         }
 
 
@@ -95,7 +91,7 @@ namespace LadyOfSpooky.Modules
                 }
             }
 
-            return "```"+ commandNameList + "```";
+            return "```" + commandNameList + "```";
         }
     }
 }

@@ -8,6 +8,8 @@ namespace LadyOfSpooky.Models
 {
     public static class Enums
     {
-        public enum Classes { Wizard, Tank, Fighter};
+        public enum Classes { Wizard, Tank, Fighter, Civil };
+
+        public enum FightStatus { Ongoing, Win, Lose };
     }
 }
