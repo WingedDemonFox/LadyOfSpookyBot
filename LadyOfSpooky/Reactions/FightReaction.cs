@@ -79,7 +79,7 @@ namespace LadyOfSpooky.Reactions
 
         private static async void StopFight(int exp, FightStatus fightStatus, Player activePlayer, FightMsgWrapper fightMsgWrapper)
         {
-            activePlayer.UpdateExpAndLevel(exp);
+            activePlayer.AwardXp(exp);
             var players = DataHelper.GetPlayersFromFile();
 
             var player = players.Where(m => m.DiscordUserId == activePlayer.DiscordUserId).SingleOrDefault();

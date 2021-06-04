@@ -16,8 +16,8 @@ namespace LadyOfSpooky.Modules
         {
             EmbedBuilder builder = new();
 
-            builder.WithTitle($"Lady of Spooky");
-            builder.WithDescription("I am the Lady of Spooky and I command legions of monsters.");
+            builder.WithTitle($"{Program.Client.CurrentUser.Username}");
+            builder.WithDescription($"I am the {Program.Client.CurrentUser.Username} and I command legions of monsters.");
 
             builder.WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl());
 

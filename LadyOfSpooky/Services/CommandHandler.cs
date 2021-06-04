@@ -68,6 +68,11 @@ namespace LadyOfSpooky.Services
             {
                 await context.Message.AddReactionAsync(EmojiHelper.Emojis["Skull"]);
                 System.Console.WriteLine($"Command failed to execute for [{context.User.Username}] <-> [{result.ErrorReason}]!");
+                // check if prefix is set
+                if (String.IsNullOrWhiteSpace(Global.Prefix))
+                {
+                    Console.WriteLine("Your prefix seems to not be set. Please check and try again.");
+                }
                 return;
             }
 

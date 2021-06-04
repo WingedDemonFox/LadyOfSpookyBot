@@ -31,11 +31,21 @@ namespace LadyOfSpooky.Modules
             var playerClass = string.Empty;
             var playerName = string.Empty;
 
-            foreach (var player in playersList)
+            // check if there are any players and if not write "No data"
+            if (players.Any())
             {
-                playerLvls += $"{player.Level}\n";
-                playerClass += $"{player.ChosenClass}\n";
-                playerName += $"{player.Name}\n";
+                foreach (var player in playersList)
+                {
+                    playerLvls += $"{player.Level}\n";
+                    playerClass += $"{player.ChosenClass}\n";
+                    playerName += $"{player.Name}\n";
+                }
+            }
+            else
+            {
+                playerLvls += $"No data";
+                playerClass += $"No data";
+                playerName += $"No data";
             }
 
             builder.AddField("Level", playerLvls, true);

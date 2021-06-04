@@ -13,15 +13,22 @@ namespace LadyOfSpooky.Helpers
     {
         public static List<Monster> GetMonstersFromFile()
         {
-            var monstersFile = File.ReadAllText(Global.MonstersFile);
-
-            var monsters = new List<Monster>();
-            if (monstersFile != String.Empty)
+            // check if file exists
+            if (File.Exists(Global.MonstersFile))
             {
-                monsters = JsonSerializer.Deserialize<List<Monster>>(monstersFile);
-            }
+                var monstersFile = File.ReadAllText(Global.MonstersFile);
 
-            return monsters;
+                var monsters = new List<Monster>();
+                if (monstersFile != String.Empty)
+                {
+                    monsters = JsonSerializer.Deserialize<List<Monster>>(monstersFile);
+                }
+                return monsters;
+            }
+            else
+            {
+                throw new FileNotFoundException("Monsters file does not exist. Please check your appsettings.json and try again.");
+            }
         }
 
         public static async void WriteMonstersToFile(List<Monster> monsters)
@@ -32,13 +39,21 @@ namespace LadyOfSpooky.Helpers
 
         public static List<Player> GetPlayersFromFile()
         {
-            var playersFile = File.ReadAllText(Global.PlayersFile);
-            var players = new List<Player>();
-            if (playersFile != String.Empty)
+            // check if file exists
+            if (File.Exists(Global.PlayersFile))
             {
-                players = JsonSerializer.Deserialize<List<Player>>(playersFile);
+                var playersFile = File.ReadAllText(Global.PlayersFile);
+                var players = new List<Player>();
+                if (playersFile != String.Empty)
+                {
+                    players = JsonSerializer.Deserialize<List<Player>>(playersFile);
+                }
+                return players;
             }
-            return players;
+            else
+            {
+                throw new FileNotFoundException("Players file does not exist. Please check your appsettings.json and try again.");
+            }
         }
 
         public static async void WritePlayersToFile(List<Player> players)

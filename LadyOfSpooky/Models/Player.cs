@@ -46,24 +46,12 @@ namespace LadyOfSpooky.Models
             }
         }
 
-        public void UpdateExpAndLevel(int expChange)
+        public void AwardXp(int expAmount)
         {
-            var lvl = Level;
-            int newExp = Exp + expChange;
-            if (newExp < 0)
-            {
-                Exp = 0;
-            }
-            else
-            {
-                Exp = newExp;
-            }
-
-            var newLvl = LevelHelper.CalcLevelByExp(Exp);
-            if (lvl != newLvl)
-            {
-                Level = newLvl;
-            }
+            int newExp = Exp + expAmount;
+            // if newExp < 0 then 0 else newExp
+            Exp = (newExp < 0) ? 0 : newExp;
+            LevelHelper.checkCurrentXP(this);
             UpdateClassValues();
         }
     }

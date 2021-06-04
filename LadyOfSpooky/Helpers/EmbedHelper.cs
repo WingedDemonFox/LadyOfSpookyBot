@@ -53,7 +53,9 @@ namespace LadyOfSpooky.Helpers
             EmbedBuilder builder = new();
 
             builder.WithTitle($"{player.Name}");
-            builder.WithDescription($"Level {player.Level} {player.ChosenClass} {player.Exp}");
+            builder.WithDescription($"Level {player.Level} - {player.ChosenClass} - {player.Exp}xp");
+
+            builder.AddField("XP until next level", $"{LevelHelper.getXpUntilNextLevel(player)}");
 
             builder.AddField("Defense", $"{player.Defense}", true);
             builder.AddField("Attack", $"{player.Attack}", true);
