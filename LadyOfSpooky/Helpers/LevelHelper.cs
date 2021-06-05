@@ -36,29 +36,27 @@ namespace LadyOfSpooky.Helpers
             };
         }
 
-        // returns a dictionary that containes xp requirements for each defined level. that data is saved in 'xpPerLevel.json'
-        private static SortedDictionary<int, int> loadXpPerLevel()
+        public static int GetBaseXp(int level)
         {
-            var xpPerLevel = new SortedDictionary<int, int>();
-            var json = JObject.Parse(File.ReadAllText("xpPerLevel.json"));
-            var levels = json.ToObject<Dictionary<String, int>>();
-            foreach (var level in levels)
-            {
-                xpPerLevel.Add(Convert.ToInt32(level.Key), level.Value);
-            }
-            return xpPerLevel;
+            return XpToLevelUp(level - 1);
         }
 
-        // return the amoun of xp that is needed for a level up
-        public static int getXpUntilNextLevel(Player player)
+        // returns the total amount of xp needed for next leve
+        public static int XpToLevelUp(int level)
         {
-            return loadXpPerLevel()[player.Level] - player.Exp;
+            return DataHelper.GetXpPerLevelFromFile()[level];
+        }
+
+        // returns the amount of xp left that is needed for a level up
+        public static int GetXpUntilNextLevel(Player player)
+        {
+            return XpToLevelUp(player.Level) - player.Exp;
         }
 
         // check if player can level up
-        private static bool playerCanLevelUp(Player player)
+        private static bool CanPlayerLevelUp(Player player)
         {
-            if (player.Exp >= loadXpPerLevel()[player.Level])
+            if (player.Exp >= XpToLevelUp(player.Level))
             {
                 return true;
             }
@@ -66,15 +64,11 @@ namespace LadyOfSpooky.Helpers
         }
 
         // levels up the player if they have enough xp
-        public static void checkCurrentXP(Player player)
+        public static void CheckCurrentXP(Player player)
         {
-            while (playerCanLevelUp(player))
+            while (CanPlayerLevelUp(player))
             {
-                int xpRequired = loadXpPerLevel()[player.Level];
-                if (player.Exp >= xpRequired)
-                {
-                    player.Level++;
-                }
+                player.Level++;
             }
         }
     }

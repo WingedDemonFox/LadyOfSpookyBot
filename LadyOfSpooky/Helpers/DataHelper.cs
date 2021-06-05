@@ -1,4 +1,5 @@
 ﻿using LadyOfSpooky.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,6 +55,19 @@ namespace LadyOfSpooky.Helpers
             {
                 throw new FileNotFoundException("Players file does not exist. Please check your appsettings.json and try again.");
             }
+        }
+
+        // returns a dictionary that containes xp requirements for each defined level. that data is saved in 'xpPerLevel.json'
+        public static SortedDictionary<int, int> GetXpPerLevelFromFile()
+        {
+            var xpPerLevel = new SortedDictionary<int, int>();
+            var json = JObject.Parse(File.ReadAllText("xpPerLevel.json"));
+            var levels = json.ToObject<Dictionary<String, int>>();
+            foreach (var level in levels)
+            {
+                xpPerLevel.Add(Convert.ToInt32(level.Key), level.Value);
+            }
+            return xpPerLevel;
         }
 
         public static async void WritePlayersToFile(List<Player> players)

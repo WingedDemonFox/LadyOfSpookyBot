@@ -23,36 +23,48 @@ namespace LadyOfSpooky.Models
 
         public void UpdateClassValues()
         {
-            if (ChosenClass == Classes.Wizard)
+
+            switch (ChosenClass)
             {
-                Attack = 12 + Level;
-                Defense = 5 + Level;
-                Health = 8 + (2 * Level);
-                HitProbability = 60;
-            }
-            else if (ChosenClass == Classes.Tank)
-            {
-                Attack = 5 + Level;
-                Defense = 12 + Level;
-                Health = 12 + (2 * Level);
-                HitProbability = 90;
-            }
-            else if (ChosenClass == Classes.Fighter)
-            {
-                Attack = 8 + Level;
-                Defense = 8 + Level;
-                Health = 10 + (2 * Level);
-                HitProbability = 85;
+                case Classes.Wizard:
+                    Attack = 12 + Level;
+                    Defense = 5 + Level;
+                    Health = 8 + (2 * Level);
+                    HitProbability = 60;
+                    break;
+                case Classes.Tank:
+                    Attack = 5 + Level;
+                    Defense = 12 + Level;
+                    Health = 12 + (2 * Level);
+                    HitProbability = 90;
+                    break;
+                case Classes.Fighter:
+                    Attack = 8 + Level;
+                    Defense = 8 + Level;
+                    Health = 10 + (2 * Level);
+                    HitProbability = 85;
+                    break;
+                case Classes.Civil:
+                    break;
+                default:
+                    break;
             }
         }
 
-        public void AwardXp(int expAmount)
+        public int GetAwardedXp(int expAmount)
         {
-            int newExp = Exp + expAmount;
-            // if newExp < 0 then 0 else newExp
-            Exp = (newExp < 0) ? 0 : newExp;
-            LevelHelper.checkCurrentXP(this);
+            int newPlayerExp = Exp + expAmount;
+            int xpForCurrentLevel = LevelHelper.XpToLevelUp(Level - 1);
+            // don't subtract xp if its at the lowest amount of the current level
+            if (newPlayerExp <= xpForCurrentLevel)
+            {
+                newPlayerExp = xpForCurrentLevel;
+            }
+            int awardedXp = newPlayerExp - Exp;
+            Exp = newPlayerExp;
+            LevelHelper.CheckCurrentXP(this);
             UpdateClassValues();
+            return awardedXp;
         }
     }
 }
