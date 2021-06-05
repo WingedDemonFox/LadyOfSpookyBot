@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace LadyOfSpooky.Modules
 
             EmbedBuilder builder = new();
 
-            builder.WithTitle($"Lady of Spooky");
+            builder.WithTitle($"{Program.Client.CurrentUser.Username}");
             builder.WithDescription($"Here to help my minions {some}");
             builder.WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl());
 
@@ -50,7 +50,7 @@ namespace LadyOfSpooky.Modules
 
             EmbedBuilder builder = new();
 
-            builder.WithTitle($"Lady of Spooky");
+            builder.WithTitle($"{Program.Client.CurrentUser.Username}");
             builder.WithDescription($"Here to help my minions {some}");
             builder.WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl());
 

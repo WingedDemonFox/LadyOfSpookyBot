@@ -16,6 +16,7 @@ namespace LadyOfSpooky.Models
 
         public int Turn { get; set; }
         public FightStatus FightStatus { get; set; } = FightStatus.Ongoing;
+        public int AwarderXp { get; set; }
 
         public Fight(Monster monster, List<Player> players)
         {

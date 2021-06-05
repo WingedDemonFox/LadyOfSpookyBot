@@ -1,4 +1,5 @@
 ﻿using LadyOfSpooky.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,15 +14,22 @@ namespace LadyOfSpooky.Helpers
     {
         public static List<Monster> GetMonstersFromFile()
         {
-            var monstersFile = File.ReadAllText(Global.MonstersFile);
-
-            var monsters = new List<Monster>();
-            if (monstersFile != String.Empty)
+            // check if file exists
+            if (File.Exists(Global.MonstersFile))
             {
-                monsters = JsonSerializer.Deserialize<List<Monster>>(monstersFile);
-            }
+                var monstersFile = File.ReadAllText(Global.MonstersFile);
 
-            return monsters;
+                var monsters = new List<Monster>();
+                if (monstersFile != String.Empty)
+                {
+                    monsters = JsonSerializer.Deserialize<List<Monster>>(monstersFile);
+                }
+                return monsters;
+            }
+            else
+            {
+                throw new FileNotFoundException("Monsters file does not exist. Please check your appsettings.json and try again.");
+            }
         }
 
         public static async void WriteMonstersToFile(List<Monster> monsters)
@@ -32,13 +40,34 @@ namespace LadyOfSpooky.Helpers
 
         public static List<Player> GetPlayersFromFile()
         {
-            var playersFile = File.ReadAllText(Global.PlayersFile);
-            var players = new List<Player>();
-            if (playersFile != String.Empty)
+            // check if file exists
+            if (File.Exists(Global.PlayersFile))
             {
-                players = JsonSerializer.Deserialize<List<Player>>(playersFile);
+                var playersFile = File.ReadAllText(Global.PlayersFile);
+                var players = new List<Player>();
+                if (playersFile != String.Empty)
+                {
+                    players = JsonSerializer.Deserialize<List<Player>>(playersFile);
+                }
+                return players;
             }
-            return players;
+            else
+            {
+                throw new FileNotFoundException("Players file does not exist. Please check your appsettings.json and try again.");
+            }
+        }
+
+        // returns a dictionary that containes xp requirements for each defined level. that data is saved in 'xpPerLevel.json'
+        public static SortedDictionary<int, int> GetXpPerLevelFromFile()
+        {
+            var xpPerLevel = new SortedDictionary<int, int>();
+            var json = JObject.Parse(File.ReadAllText("xpPerLevel.json"));
+            var levels = json.ToObject<Dictionary<String, int>>();
+            foreach (var level in levels)
+            {
+                xpPerLevel.Add(Convert.ToInt32(level.Key), level.Value);
+            }
+            return xpPerLevel;
         }
 
         public static async void WritePlayersToFile(List<Player> players)

@@ -1,0 +1,26 @@
+[
+    {
+      "NumberOfAttacks": 1,
+      "PicUrl": "",
+      "HasSpawnedBefore": false,
+      "Attack": 4,
+      "Defense": 8,
+      "Health": 18,
+      "HitProbability": 60,
+      "Level": 1,
+      "Exp": 100,
+      "Name": "Zombie"
+    },
+    {
+      "NumberOfAttacks": 2,
+      "PicUrl": "",
+      "HasSpawnedBefore": false,
+      "Attack": 17,
+      "Defense": 11,
+      "Health": 45,
+      "HitProbability": 70,
+      "Level": 4,
+      "Exp": 1100,
+      "Name": "Ghost"
+    }
+]

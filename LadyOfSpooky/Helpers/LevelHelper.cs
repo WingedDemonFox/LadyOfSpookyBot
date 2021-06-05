@@ -1,6 +1,10 @@
 ﻿using Discord;
+using LadyOfSpooky.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,70 +36,40 @@ namespace LadyOfSpooky.Helpers
             };
         }
 
-        public static int CalcLevelByExp(int exp)
+        public static int GetBaseXp(int level)
         {
-            int lvl = 1;
-            if (exp < 0)
+            return XpToLevelUp(level - 1);
+        }
+
+        // returns the total amount of xp needed for next leve
+        public static int XpToLevelUp(int level)
+        {
+            return DataHelper.GetXpPerLevelFromFile()[level];
+        }
+
+        // returns the amount of xp left that is needed for a level up
+        public static int GetXpUntilNextLevel(Player player)
+        {
+            return XpToLevelUp(player.Level) - player.Exp;
+        }
+
+        // check if player can level up
+        private static bool CanPlayerLevelUp(Player player)
+        {
+            if (player.Exp >= XpToLevelUp(player.Level))
             {
-                lvl = 1;
+                return true;
             }
-            else if (exp >= 165000)
+            return false;
+        }
+
+        // levels up the player if they have enough xp
+        public static void CheckCurrentXP(Player player)
+        {
+            while (CanPlayerLevelUp(player))
             {
-                lvl = 15;
+                player.Level++;
             }
-            else if (exp >= 140000)
-            {
-                lvl = 14;
-            }
-            else if (exp >= 120000)
-            {
-                lvl = 13;
-            }
-            else if (exp >= 100000)
-            {
-                lvl = 12;
-            }
-            else if (exp >= 85000)
-            {
-                lvl = 11;
-            }
-            else if (exp >= 64000)
-            {
-                lvl = 10;
-            }
-            else if (exp >= 48000)
-            {
-                lvl = 9;
-            }
-            else if (exp >= 34000)
-            {
-                lvl = 8;
-            }
-            else if (exp >= 23000)
-            {
-                lvl = 7;
-            }
-            else if (exp >= 14000)
-            {
-                lvl = 6;
-            }
-            else if (exp >= 6500)
-            {
-                lvl = 5;
-            }
-            else if (exp >= 2700)
-            {
-                lvl = 4;
-            }
-            else if (exp >= 900)
-            {
-                lvl = 3;
-            }
-            else if (exp >= 300)
-            {
-                lvl = 2;
-            }
-            return lvl;
         }
     }
 }

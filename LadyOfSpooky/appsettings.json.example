@@ -1,0 +1,9 @@
+{
+  "DiscordToken": "",
+  "Version": "0.1",
+  "OwnerId": "",
+  "PlayersFile": "./players.json",
+  "MonstersFile": "./monsters.json",
+  "Prefix": "",
+  "PrefixDebug": ""
+}

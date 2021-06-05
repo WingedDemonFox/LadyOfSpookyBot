@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using LadyOfSpooky.Services;
@@ -16,7 +16,7 @@ namespace LadyOfSpooky
     public class Program
     {
         private IConfiguration _config;
-        private DiscordSocketClient _client;
+        public static DiscordSocketClient Client;
 
         public static void Main(string[] args)
         {
@@ -36,7 +36,6 @@ namespace LadyOfSpooky
                  .Build();
 
             Global.OwnerId = Convert.ToUInt64(_config["OwnerId"]);
-            Global.BotId = Convert.ToUInt64(_config["BotId"]);
             Global.PlayersFile = _config["PlayersFile"];
             Global.MonstersFile = _config["MonstersFile"];
             Global.Version = _config["Version"];
@@ -50,17 +49,17 @@ namespace LadyOfSpooky
 
             using var services = ConfigureServices();
             var client = services.GetRequiredService<DiscordSocketClient>();
-            _client = client;
+            Client = client;
 
             client.Log += LogAsync;
             client.Ready += ReadyAsync;
 
             services.GetRequiredService<CommandService>().Log += LogAsync;
             var token = _config["DiscordToken"];
-            await _client.LoginAsync(TokenType.Bot, token);
-            await _client.StartAsync();
+            await Client.LoginAsync(TokenType.Bot, token);
+            await Client.StartAsync();
 #if DEBUG
-            await _client.SetGameAsync("dev mode", null, ActivityType.Listening);
+            await Client.SetGameAsync("dev mode", null, ActivityType.Listening);
 #else
             await _client.SetGameAsync("the monsters", null, ActivityType.Watching);
 #endif
@@ -82,7 +81,8 @@ namespace LadyOfSpooky
 
         private Task ReadyAsync()
         {
-            Console.WriteLine($"Connected as -> [{_client.CurrentUser}] :)");
+            Console.WriteLine($"Connected as -> [{Client.CurrentUser}] :)");
+            Global.BotId = Client.CurrentUser.Id;
             return Task.CompletedTask;
         }
 
